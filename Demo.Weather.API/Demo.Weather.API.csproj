@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>be883bc4-2f14-4b89-ae8e-e15ae6ec4816</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+
+	<ItemGroup>		
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />		
+		<PackageReference Include="Seq.Extensions.Logging" Version="6.1.0-dev-00091" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Demo.Weather.Shared\Demo.Weather.Shared.csproj" />
+	</ItemGroup>
+</Project>

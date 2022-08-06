@@ -1,0 +1,72 @@
+version: '3.4'
+
+services: 
+  demo.api.weather.backend:
+    image: ${DOCKER_REGISTRY-}demoapimonitoringvisualizationbackend-zipkin
+    container_name: demo-api-weather-backend
+    build:
+      context: .
+      dockerfile: Demo.Weather.Backend.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=5003
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=SECRETPASSWORD
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:      
+      - 5004:80
+      - 5003:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  demo.api.weather:
+    image: ${DOCKER_REGISTRY-}demoapimonitoringvisualization-zipkin
+    container_name: demo-api-weather
+    build:
+      context: .
+      dockerfile: Demo.Weather.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=SECRETPASSWORD
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:      
+      - 5002:80
+      - 5001:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
+      #- ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      #- ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - demo.api.weather.backend
+
+  seq-demo-logging:
+    image: datalust/seq:latest
+    container_name: "seq-demo-logging"
+    restart: unless-stopped
+    ports:
+      - 5380:80   # UI
+      - 5341:5341 # Data ingest
+    environment:      
+      - ACCEPT_EULA=Y
+
+  # https://www.jaegertracing.io/docs/1.21/opentelemetry/
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    hostname: jaeger
+    restart: always
+    ports:
+      - 16686:16686 # UI: http://localhost:16686/search
+      #- 4317:55680
+      #- 55680:55680 # OTLP receiver listening on port 
+      #- 13133:13133 # Health check port       
+      - '5775:5775/udp'
+      - '6831:6831/udp'
+      - '6832:6832/udp'
+      - '5778:5778'
+      - '9411:9411'
+      
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=9411
+

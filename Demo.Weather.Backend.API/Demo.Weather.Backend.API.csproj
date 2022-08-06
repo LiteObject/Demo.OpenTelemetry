@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>c6e89fd6-9750-49d5-8f67-da3cad6d8382</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="MySqlConnector" Version="2.1.11" />		
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />		
+		<PackageReference Include="Seq.Extensions.Logging" Version="6.1.0-dev-00091" />		
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Demo.Weather.Shared\Demo.Weather.Shared.csproj" />
+	</ItemGroup>
+
+</Project>
